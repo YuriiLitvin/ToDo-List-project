@@ -1,6 +1,9 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const date = require(__dirname + "/date.js");
+
+
 
 const app = express();
 
@@ -13,14 +16,7 @@ let items = ["Get up early"];
 let workItems = [];
 
 app.get("/", function (req, res) {
-  let today = new Date();
-  let options = {
-    weekday: "long",
-    day: "numeric",
-    month: "long"
-  };
-  let currentDay = today.toLocaleDateString("en-US", options);
-
+  let currentDay = date();
   res.render("list", {listTitle: currentDay, newListItems: items});
 });
 
