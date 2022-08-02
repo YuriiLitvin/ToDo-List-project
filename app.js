@@ -12,16 +12,16 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-let items = ["Get up early"];
-let workItems = [];
+const items = ["Get up early"];
+const workItems = [];
 
 app.get("/", function (req, res) {
-  let currentDay = date();
-  res.render("list", {listTitle: currentDay, newListItems: items});
+  const currentDate = date.getDate();
+  res.render("list", {listTitle: currentDate, newListItems: items});
 });
 
 app.post("/", function (req, res) {
-  let item = req.body.newItem;
+  const item = req.body.newItem;
 
   if (req.body.list === "Work List") {
     workItems.push(item);
