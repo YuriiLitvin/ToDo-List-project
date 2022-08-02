@@ -8,7 +8,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 app.get("/", function (req, res) {
-  res.send("<h1> Hello </h1>");
+  var today = new Date();
+  var options = {
+    weekday: "long",
+    day: "numeric",
+    month: "long"
+  };
+  var currentDay = today.toLocaleDateString("en-US", options);
+
+  res.render("list", {kindOfDay: currentDay});
 });
 
 
