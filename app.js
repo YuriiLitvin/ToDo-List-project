@@ -13,16 +13,32 @@ app.use(express.static("public"));
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb://localhost: 27017/todoListDB");
+  await mongoose.connect("mongodb://localhost:27017/todoListDB");
 
-  const todoListSchema = new mongoose.Schema({
-    item: String
+  const taskSchema = new mongoose.Schema({
+    text: String
   });
 
-  const ToDoList = mongoose.model("ToDoList", todoListSchema);
-  
+  const workTaskSchema = new mongoose.Schema({
+    text: String
+  });
+
+  const Task = mongoose.model("Task", taskSchema);
+  const WorkTask = mongoose.model("WorkTask", workTaskSchema);
+
+
+  const task = new Task ({text: "Prepare some good food."});
+  const workTask = new WorkTask({text: "Finish this project by myself."});
+
+  await task.save();
+  await workTask.save();
+
+  await Task.find();
+  await WorkTask.find();
 }
 
+items = [];
+workItems = [];
 app.get("/", function (req, res) {
   const currentDate = date.getDate();
   res.render("list", {listTitle: currentDate, newListItems: items});
