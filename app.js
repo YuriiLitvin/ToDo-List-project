@@ -1,19 +1,27 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 const date = require(__dirname + "/date.js");
-
-
 
 const app = express();
 
 app.set("view engine", "ejs");
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-const items = ["Get up early"];
-const workItems = [];
+main().catch(err => console.log(err));
+
+async function main() {
+  await mongoose.connect("mongodb://localhost: 27017/todoListDB");
+
+  const todoListSchema = new mongoose.Schema({
+    item: String
+  });
+
+  const ToDoList = mongoose.model("ToDoList", todoListSchema);
+  
+}
 
 app.get("/", function (req, res) {
   const currentDate = date.getDate();
