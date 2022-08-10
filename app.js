@@ -10,56 +10,54 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-let tasks = [];
-let workTasks = [];
+
 main().catch(err => console.log(err));
 
 async function main() {
   await mongoose.connect("mongodb://localhost:27017/todoListDB");
-
-  const taskSchema = new mongoose.Schema({
-    text: String
-  });
-
-  const workTaskSchema = new mongoose.Schema({
-    text: String
-  });
-
-  const Task = mongoose.model("Task", taskSchema);
-  const WorkTask = mongoose.model("WorkTask", workTaskSchema);
-
-
-  const task = new Task ({text: "Prepare some good food."});
-  const workTask = new WorkTask({text: "Finish this project by myself."});
-
-  await task.save();
-  await workTask.save();
-
-  tasks = await Task.find();
-  workTasks = await WorkTask.find();
 }
+
+const itemSchema = new mongoose.Schema({
+  text: String
+});
+
+const Item = mongoose.model("Item", itemSchema);
+const WorkItem = mongoose.model("WorkItem", itemSchema);
 
 
 app.get("/", function (req, res) {
   const currentDate = date.getDate();
-  res.render("list", {listTitle: currentDate, newListItems: tasks});
+
+  Item.find({}, function(err, foundItems) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("list", {listTitle: currentDate, newListItems: foundItems});
+    }
+  });
 });
 
 app.post("/", function (req, res) {
-  const item = req.body.newItem;
 
   if (req.body.list === "Work List") {
-    workItems.push(item);
+    const workItem = new WorkItem ({text: req.body.newItem});
+    workItem.save();
     res.redirect("/work");
   } else {
-    items.push(item);
+    const item = new Item ({text: req.body.newItem});
+    item.save();
     res.redirect("/");
   }
-
 });
 
 app.get("/work", function(req, res) {
-  res.render("list", {listTitle: "Work List", newListItems: workTasks});
+  WorkItem.find({}, function(err, foundItems) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("list", {listTitle: "Work List", newListItems: foundItems});
+    }
+  });
 });
 
 app.get("/about", function(req, res) {
