@@ -60,6 +60,18 @@ app.get("/work", function(req, res) {
   });
 });
 
+app.post("/delete", function(req, res) {
+  const itemId = req.body.myCheck;
+
+  Item.findByIdAndRemove(itemId, function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/");
+    }
+  });
+});
+
 app.get("/about", function(req, res) {
   res.render("about");
 });
