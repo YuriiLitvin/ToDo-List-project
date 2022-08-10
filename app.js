@@ -10,6 +10,8 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+let tasks = [];
+let workTasks = [];
 main().catch(err => console.log(err));
 
 async function main() {
@@ -33,15 +35,14 @@ async function main() {
   await task.save();
   await workTask.save();
 
-  await Task.find();
-  await WorkTask.find();
+  tasks = await Task.find();
+  workTasks = await WorkTask.find();
 }
 
-items = [];
-workItems = [];
+
 app.get("/", function (req, res) {
   const currentDate = date.getDate();
-  res.render("list", {listTitle: currentDate, newListItems: items});
+  res.render("list", {listTitle: currentDate, newListItems: tasks});
 });
 
 app.post("/", function (req, res) {
@@ -58,7 +59,7 @@ app.post("/", function (req, res) {
 });
 
 app.get("/work", function(req, res) {
-  res.render("list", {listTitle: "Work List", newListItems: workItems});
+  res.render("list", {listTitle: "Work List", newListItems: workTasks});
 });
 
 app.get("/about", function(req, res) {
