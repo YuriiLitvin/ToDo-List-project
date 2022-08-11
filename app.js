@@ -14,7 +14,7 @@ app.use(express.static("public"));
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb://localhost:27017/todoListDB");
+  await mongoose.connect("mongodb+srv://admin-yuri:tested1521@cluster0.rvllyyy.mongodb.net/todoListDB");
 }
 
 const itemSchema = new mongoose.Schema({
@@ -83,7 +83,6 @@ app.post("/", function (req, res) {
       res.redirect("/" + listName);
     });
   }
-
 });
 
 app.get("/:customListName", function(req, res) {
@@ -103,7 +102,6 @@ app.get("/:customListName", function(req, res) {
       }
     }
   });
-
 });
 
 app.post("/delete", function(req, res) {
@@ -128,8 +126,6 @@ app.post("/delete", function(req, res) {
         });
   }
 });
-
-
 
 app.get("/about", function(req, res) {
   res.render("about");
